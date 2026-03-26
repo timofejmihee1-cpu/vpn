@@ -1,1 +1,2 @@
-pySocks5
+fastapi
+uvicorn
