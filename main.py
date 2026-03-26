@@ -1,17 +1,20 @@
 import os
 import asyncio
-from aiosocksrv.server import SocksServer
+from aiosocks.server import Socks5Server
 
 async def main():
-    # Render сам назначит порт через эту переменную
+    # Порт от Render
     port = int(os.environ.get("PORT", 8080))
-    # Твой секретный пароль, который ты укажешь в настройках Render
-    password = os.environ.get("PROXY_PASSWORD", "default_pass")
+    # Твой пароль из настроек Render
+    password = os.environ.get("PROXY_PASSWORD", "happ123")
     
-    server = SocksServer(host="0.0.0.0", port=port, auth_user="user", auth_pass=password)
-    print(f"Сервер запущен на порту {port} с паролем безопасности.")
+    # Запуск сервера
+    server = Socks5Server(host="0.0.0.0", port=port)
+    # Добавляем пользователя
+    server.add_user("user", password)
     
-    await server.run_server()
+    print(f"Сервер запущен на порту {port}")
+    await server.start()
 
 if __name__ == "__main__":
     asyncio.run(main())
