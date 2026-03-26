@@ -1,20 +1,21 @@
 import os
-import asyncio
-from aiosocks.server import Socks5Server
+from pysocks5 import Socks5Server
 
-async def main():
+def main():
     # Порт от Render
     port = int(os.environ.get("PORT", 8080))
-    # Твой пароль из настроек Render
+    # Твой пароль из настроек Render (или happ123 по умолчанию)
     password = os.environ.get("PROXY_PASSWORD", "happ123")
     
-    # Запуск сервера
-    server = Socks5Server(host="0.0.0.0", port=port)
-    # Добавляем пользователя
-    server.add_user("user", password)
+    # Создаем сервер. Пользователь: user, Пароль: password
+    server = Socks5Server(
+        host="0.0.0.0", 
+        port=port, 
+        auth={"user": password}
+    )
     
-    print(f"Сервер запущен на порту {port}")
-    await server.start()
+    print(f"VPN Server starting on port {port}...")
+    server.run()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
